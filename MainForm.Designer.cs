@@ -33,12 +33,14 @@
             chatPanel.BorderStyle = BorderStyle.None;
             chatPanel.Depth = 0;
             chatPanel.Dock = DockStyle.Fill;
-            chatPanel.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
+            chatPanel.Font = new Font("Microsoft Sans Serif", 12F);
             chatPanel.ForeColor = Color.FromArgb(222, 0, 0, 0);
             chatPanel.Hint = "";
             chatPanel.Location = new Point(10, 75);
+            chatPanel.Margin = new Padding(10);
             chatPanel.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
             chatPanel.Name = "chatPanel";
+            chatPanel.ReadOnly = true;
             chatPanel.Size = new Size(780, 317);
             chatPanel.TabIndex = 3;
             chatPanel.Text = "";
@@ -52,7 +54,7 @@
             inputBox.CharacterCasing = CharacterCasing.Normal;
             inputBox.Depth = 0;
             inputBox.Dock = DockStyle.Bottom;
-            inputBox.Font = new Font("Roboto", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
+            inputBox.Font = new Font("Microsoft Sans Serif", 12F);
             inputBox.HideSelection = true;
             inputBox.LeadingIcon = null;
             inputBox.Location = new Point(10, 392);
@@ -70,9 +72,9 @@
             inputBox.Size = new Size(780, 48);
             inputBox.TabIndex = 4;
             inputBox.TabStop = false;
-            inputBox.Text = "materialTextBoxEdit1";
             inputBox.TextAlign = HorizontalAlignment.Left;
             inputBox.TrailingIcon = null;
+            inputBox.UseAccent = false;
             inputBox.UseSystemPasswordChar = false;
             inputBox.KeyDown += inputBox_KeyDown;
             // 
@@ -83,9 +85,11 @@
             ClientSize = new Size(800, 450);
             Controls.Add(chatPanel);
             Controls.Add(inputBox);
+            DrawerAutoShow = true;
             Name = "MainForm";
             Padding = new Padding(10, 75, 10, 10);
-            Text = "MainForm";
+            Text = "Chat with AI";
+            Load += MainForm_Load;
             ResumeLayout(false);
         }
 

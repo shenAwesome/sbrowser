@@ -145,8 +145,7 @@ public sealed class WebViewBridge {
             Console.WriteLine($"Deserialization Error for type {typeof(T).Name}: {ex.Message} JSON: {resultJson}");
             // Handle primitives that don't need JSON parsing (e.g., if JS returned a raw number or string that wasn't JSON-encoded)
             if (typeof(T) == typeof(string))
-                return (T)(object)resultJson.Trim('"');
-
+                return (T)(object)resultJson.Trim('"'); 
             return default;
         }
     }

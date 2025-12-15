@@ -50,8 +50,13 @@ namespace sbrowser {
                     string botJs = File.ReadAllText(jsPath);
                     await webView.CoreWebView2.ExecuteScriptAsync(botJs);
                     AskImplementation = async (string question) => {
-                        var ret = await bridge.CallJsAsync<string>("askAI", new { question });
-                        return ret;
+                        try {
+                            var ret = await bridge.CallJsAsync<string>("askAI", new { question });
+                            return ret;
+                        } catch (Exception e) {
+                            this.Refresh();
+                            return "something wrong, rebooting...";
+                        }
                     };
                     //MessageBox.Show(ret, "JS Response", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 });
@@ -64,7 +69,7 @@ namespace sbrowser {
                 //webView.CoreWebView2.OpenDevToolsWindow();
 
             } catch (Exception ex) {
-                //MessageBox.Show($"An unexpected error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"An unexpected error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             //await Task.Delay(15000);

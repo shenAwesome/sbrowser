@@ -16,6 +16,7 @@ namespace sbrowser {
 
         public MainForm() {
             InitializeComponent();
+            this.StartPosition = FormStartPosition.CenterScreen;
         }
 
         private void MetroTextBox1_KeyPress(object? sender, KeyPressEventArgs e) {
@@ -56,6 +57,10 @@ namespace sbrowser {
                 string aiResponse = await AI.Ask(userInput);
                 chatPanel.AppendText(aiResponse + Environment.NewLine);
             }
+        }
+
+        private void MainForm_Load(object sender, EventArgs e) {
+
         }
     }
 }
