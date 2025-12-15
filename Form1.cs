@@ -1,6 +1,8 @@
 using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.WinForms;
+using System.Collections.Concurrent;
 using System.Drawing.Drawing2D;
+using System.Text.Json;
 
 namespace sbrowser;
 
@@ -9,6 +11,7 @@ public partial class Form1 : Form {
     private CartoonTextBox addressBar;
     private CartoonButton goButton;
     private Panel topPanel;
+    private WebViewBridge bridge;
 
     public Form1() {
         InitializeComponent();
@@ -63,7 +66,7 @@ public partial class Form1 : Form {
 
         // GO button
         goButton = new CartoonButton {
-            Text = "GO!",
+            Text = "GO",
             Dock = DockStyle.Fill,
             Margin = new Padding(0),
             BackColor = Color.FromArgb(241, 196, 15),
@@ -71,7 +74,7 @@ public partial class Form1 : Form {
             Font = new Font("Comic Sans MS", 12, FontStyle.Bold)
         };
         goButton.Click += GoButton_Click;
-        goButton.Margin = new Padding(1);
+        goButton.Margin = new Padding(2);
 
         layout.Controls.Add(goButton, 1, 0);
     }
@@ -85,9 +88,31 @@ public partial class Form1 : Form {
             }
         );
         await webView.EnsureCoreWebView2Async(env);
+        bridge = new WebViewBridge(webView);
+        bridge.AddOnLoad(async () => {
+            Console.WriteLine("Page loaded");
+            string jsPath = Path.Combine(AppContext.BaseDirectory, "bot.js");
+            string botJs = File.ReadAllText(jsPath);
+            await webView.CoreWebView2.ExecuteScriptAsync(botJs);
 
-        webView.Source = new Uri("https://www.google.com");
-        addressBar.Text = "https://www.google.com";
+            /*
+
+            await Task.Delay(1000 * 10);
+            var ret = await bridge.CallJsAsync<string>("askAI", new {
+                question = "how is your day"
+            });
+
+            MessageBox.Show(ret, "JS Response", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            */
+        });
+
+
+        await bridge.InitializeAsync();
+        webView.CoreWebView2.OpenDevToolsWindow();
+
+        var url = "https://gemini.google.com/app?hl=en-AU";
+        webView.Source = new Uri(url);
+        //addressBar.Text = "https://www.google.com";
 
         webView.SourceChanged += (_, _) => {
             if (webView.CoreWebView2 != null)
@@ -134,7 +159,7 @@ public class CartoonButton : Button {
         var g = e.Graphics;
         g.SmoothingMode = SmoothingMode.AntiAlias;
 
-        int borderSize = 3;
+        int borderSize = 1;
         var rect = ClientRectangle;
         var drawRect = new Rectangle(
             rect.X + borderSize / 2,
