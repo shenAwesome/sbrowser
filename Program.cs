@@ -5,22 +5,32 @@ namespace sbrowser {
         /// </summary>
         [STAThread]
         static void Main() {
-
+            Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);
             ApplicationConfiguration.Initialize();
 
-            var webviewForm = new WebViewForm {
-                ShowInTaskbar = false,
-                WindowState = FormWindowState.Minimized,
-                Opacity = 0
-            };
+            var webviewForm = new GeminiAgent();
+
+            webviewForm.IsDebug = false;
+
+            if (!webviewForm.IsDebug) {
+                webviewForm.Opacity = 0;
+                webviewForm.ShowInTaskbar = false;
+            }
             webviewForm.Show();
-            webviewForm.Location = new Point(-2000, -2000);
+            if (!webviewForm.IsDebug) {
+                webviewForm.Location = new Point(-2000, -2000);
+            }
             //webviewForm.Visible = false; 
             var mainForm = new MainForm {
-                AI = webviewForm
+                AI = webviewForm,
+                ShowInTaskbar = false
             };
 
-            Application.Run(mainForm);
+            var fixForm = new FixForm();
+            fixForm.main = mainForm;
+            fixForm.AI = webviewForm;
+
+            Application.Run(fixForm);
         }
     }
 }

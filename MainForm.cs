@@ -12,7 +12,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 namespace sbrowser {
     public partial class MainForm : MaterialForm {
 
-        public WebViewForm AI;
+        public GeminiAgent AI;
 
         public MainForm() {
             InitializeComponent();
@@ -45,22 +45,42 @@ namespace sbrowser {
                 inputBox.Text = string.Empty;
                 e.SuppressKeyPress = true;
                 e.Handled = true;
-
                 chatPanel.Text = "";
+
+
+                if (userInput == "exit" || userInput == "close") {
+                    Application.Exit();
+                    return;
+                }
+
                 //metroRichTextBox1.SelectionStart = richTextBox1.TextLength;
                 //metroRichTextBox1.SelectionLength = 0;
                 //metroRichTextBox1.SelectionFont = new Font(richTextBox1.Font, FontStyle.Bold);
                 chatPanel.AppendText(userInput + Environment.NewLine + Environment.NewLine);
 
+                //chatPanel.AddItem(userInput + Environment.NewLine + Environment.NewLine);
+
                 // Reset font to regular for AI response
                 //richTextBox1.SelectionFont = new Font(richTextBox1.Font, FontStyle.Regular);
                 string aiResponse = await AI.Ask(userInput);
                 chatPanel.AppendText(aiResponse + Environment.NewLine);
+                //chatPanel.AddItem(aiResponse); 
             }
         }
 
         private void MainForm_Load(object sender, EventArgs e) {
 
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e) {
+            if (e.CloseReason == CloseReason.UserClosing) {
+                // 1. Cancel the actual closing operation. 
+                // This stops the form from being disposed.
+                e.Cancel = true;
+
+                // 2. Hide the form.
+                this.Hide();
+            }
         }
     }
 }

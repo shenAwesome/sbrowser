@@ -106,20 +106,30 @@ function sleep(ms) {
 }
 
 async function ask(question) {
+
     const getContainers = () => document.querySelectorAll('message-content')
+    const getThinkingCount = () => document.querySelectorAll('.bard-avatar.thinking').length
+
     const count = getContainers().length
     const input = await getElement('.ql-editor>p')
     input.textContent = question
+
+    const baseLine = getThinkingCount()
     fireEnterKey(input)
     //wait for answer
     await waitUntil(() => {
         return getContainers().length > count
     })
+    await waitUntil(() => {
+        return getThinkingCount() == baseLine
+    })
     //wait for it to finish
+    /*
     await waitStable(() => {
         return document.querySelectorAll('[data-path-to-node]').length
     }, 1000)
-    await sleep(1000)
+    */
+    //await sleep(1000)
     const containers = getContainers()
     const lastContainer = containers[containers.length - 1];
     const answer = lastContainer.innerText

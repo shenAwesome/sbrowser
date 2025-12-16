@@ -4,13 +4,14 @@ using Microsoft.Web.WebView2.WinForms;
 using Microsoft.Web.WebView2.Core;
 
 namespace sbrowser {
-    public class WebViewForm : Form {
+    public class GeminiAgent : Form {
         private readonly WebView2 webView;
         private WebViewBridge bridge;
+        public bool IsDebug = false;
         /// <summary>
         /// Initializes a new instance of the WebViewForm class.
         /// </summary>
-        public WebViewForm() {
+        public GeminiAgent() {
             // Set up the form properties
             this.Text = "WebView2 Host Form";
             this.Size = new System.Drawing.Size(800, 600);
@@ -35,10 +36,16 @@ namespace sbrowser {
         /// </summary>
         private async void WebViewForm_Load(object sender, EventArgs e) {
             try {
+
+                string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                string customUserDataFolder = Path.Combine(appDataPath, "aslib", "sfixer", "WebView2Data");
+                Directory.CreateDirectory(customUserDataFolder);
+
+
                 // Ensure the CoreWebView2 environment is initialized
                 // This prepares the underlying browser process. 
                 await webView.EnsureCoreWebView2Async(await CoreWebView2Environment.CreateAsync(
-                      userDataFolder: null,
+                      userDataFolder: customUserDataFolder,
                       options: new CoreWebView2EnvironmentOptions {
                           AdditionalBrowserArguments = "--no-proxy-server"
                       }
@@ -46,7 +53,7 @@ namespace sbrowser {
                 bridge = new WebViewBridge(webView);
                 bridge.AddOnLoad(async () => {
                     Console.WriteLine("Page loaded");
-                    string jsPath = Path.Combine(AppContext.BaseDirectory, "bot.js");
+                    string jsPath = Path.Combine(AppContext.BaseDirectory, "bots/gemini.js");
                     string botJs = File.ReadAllText(jsPath);
                     await webView.CoreWebView2.ExecuteScriptAsync(botJs);
                     AskImplementation = async (string question) => {
@@ -66,7 +73,7 @@ namespace sbrowser {
                 var url = "https://gemini.google.com/app?hl=en-AU";
                 webView.Source = new Uri(url);
 
-                //webView.CoreWebView2.OpenDevToolsWindow();
+                if (IsDebug) webView.CoreWebView2.OpenDevToolsWindow();
 
             } catch (Exception ex) {
                 MessageBox.Show($"An unexpected error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
