@@ -1,4 +1,4 @@
-﻿namespace sbrowser
+﻿namespace sfixer
 {
     partial class Form1
     {

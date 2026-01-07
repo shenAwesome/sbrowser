@@ -3,7 +3,7 @@ using System.Windows.Forms;
 using Microsoft.Web.WebView2.WinForms;
 using Microsoft.Web.WebView2.Core;
 
-namespace sbrowser {
+namespace sfixer {
     public class GeminiAgent : Form {
         private readonly WebView2 webView;
         private WebViewBridge bridge;
@@ -61,7 +61,7 @@ namespace sbrowser {
                             var ret = await bridge.CallJsAsync<string>("askAI", new { question });
                             return ret;
                         } catch (Exception e) {
-                            this.Refresh();
+                            webView.Refresh();
                             return "something wrong, rebooting...";
                         }
                     };

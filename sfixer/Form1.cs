@@ -4,7 +4,7 @@ using System.Collections.Concurrent;
 using System.Drawing.Drawing2D;
 using System.Text.Json;
 
-namespace sbrowser;
+namespace sfixer;
 
 public partial class Form1 : Form {
     private WebView2 webView;

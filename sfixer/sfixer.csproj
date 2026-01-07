@@ -8,6 +8,16 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<ExcludeXmlDocFiles>true</ExcludeXmlDocFiles>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<AssemblyName>sfixer</AssemblyName>
+		
+		<!-- MSIX Configuration -->
+		<EnableMsixTooling>true</EnableMsixTooling>
+		<GenerateAppxPackageOnBuild>true</GenerateAppxPackageOnBuild>
+		<AppxPackageSigningEnabled>true</AppxPackageSigningEnabled>
+		<PackageCertificateKeyFile>sfixer_TemporaryKey.pfx</PackageCertificateKeyFile>
+		<AppxPackageName>sFixer</AppxPackageName>
+		<AppxPackagePublisher>CN=sBrowserTeam</AppxPackagePublisher>
+		<AppxPackageVersion>1.0.0.0</AppxPackageVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -28,15 +38,24 @@
 		<None Remove="Microsoft.Web.WebView2.Wpf.xml" />
 
 		<PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3650.58" />
+
+		<PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.7175" />
 		<PackageReference Include="ReaLTaiizor" Version="3.8.1.4" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<EditorConfigFiles Remove="D:\github\sbrowser\.editorconfig" />
+		<AppxManifest Include="Package.appxmanifest">
+			<SubType>Designer</SubType>
+		</AppxManifest>
+		<Content Include="Images\**" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="D:\github\sbrowser\.editorconfig" />
+		<EditorConfigFiles Remove=".editorconfig" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include=".editorconfig" />
 	</ItemGroup>
 
 	<ItemGroup>

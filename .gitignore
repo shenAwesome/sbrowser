@@ -184,6 +184,7 @@ DocProject/Help/html
 
 # Click-Once directory
 publish/
+!sfixer/bin/Release/net10.0-windows/publish/
 
 # Publish Web Output
 *.[Pp]ublish.xml

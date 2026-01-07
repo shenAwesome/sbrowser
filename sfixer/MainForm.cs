@@ -9,7 +9,7 @@ using System.Text;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
-namespace sbrowser {
+namespace sfixer {
     public partial class MainForm : MaterialForm {
 
         public GeminiAgent AI;
@@ -45,7 +45,7 @@ namespace sbrowser {
                 inputBox.Text = string.Empty;
                 e.SuppressKeyPress = true;
                 e.Handled = true;
-                chatPanel.Text = "";
+                //chatPanel.Text = "";
 
 
                 if (userInput == "exit" || userInput == "close") {
@@ -53,17 +53,26 @@ namespace sbrowser {
                     return;
                 }
 
-                //metroRichTextBox1.SelectionStart = richTextBox1.TextLength;
-                //metroRichTextBox1.SelectionLength = 0;
-                //metroRichTextBox1.SelectionFont = new Font(richTextBox1.Font, FontStyle.Bold);
+                if (userInput == "clear") {
+                    chatPanel.Text = "";
+                    return;
+                }
+                chatPanel.SelectionIndent = 10;
+
+                chatPanel.SelectionStart = chatPanel.TextLength;
+                chatPanel.SelectionLength = 0;
+                chatPanel.SelectionFont = new Font(chatPanel.Font, FontStyle.Bold);
                 chatPanel.AppendText(userInput + Environment.NewLine + Environment.NewLine);
 
                 //chatPanel.AddItem(userInput + Environment.NewLine + Environment.NewLine);
 
                 // Reset font to regular for AI response
-                //richTextBox1.SelectionFont = new Font(richTextBox1.Font, FontStyle.Regular);
+                chatPanel.SelectionFont = new Font(chatPanel.Font, FontStyle.Regular);
                 string aiResponse = await AI.Ask(userInput);
-                chatPanel.AppendText(aiResponse + Environment.NewLine);
+                chatPanel.AppendText(aiResponse + Environment.NewLine + Environment.NewLine);
+                chatPanel.SelectionStart = chatPanel.Text.Length;
+                chatPanel.ScrollToCaret();
+
                 //chatPanel.AddItem(aiResponse); 
             }
         }
@@ -81,6 +90,10 @@ namespace sbrowser {
                 // 2. Hide the form.
                 this.Hide();
             }
+        }
+
+        private void inputBox_Click(object sender, EventArgs e) {
+
         }
     }
 }

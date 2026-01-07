@@ -1,4 +1,4 @@
-﻿namespace sbrowser {
+﻿namespace sfixer {
     partial class MainForm {
         /// <summary>
         /// Required designer variable.
@@ -58,6 +58,7 @@
             inputBox.TrailingIcon = null;
             inputBox.UseAccent = false;
             inputBox.UseSystemPasswordChar = false;
+            inputBox.Click += inputBox_Click;
             inputBox.KeyDown += inputBox_KeyDown;
             // 
             // chatPanel
